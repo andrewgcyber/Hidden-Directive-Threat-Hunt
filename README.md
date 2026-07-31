@@ -35,7 +35,7 @@ Although multiple post-exploitation techniques were identified throughout the in
 
 Greenfield Logistics experienced a **Priority 1 (P1)** security incident after Microsoft Defender XDR detected suspicious activity originating from workstation **GF-WS01**.
 
-The Managed Security Service Provider (MSSP) requested a complete investigation to determine:
+The scenario requested a complete investigation to determine:
 
 - Initial access vector
 - Attack timeline
