@@ -1,107 +1,63 @@
-# GF-INC-2026-0704 — Greenfield Threat Hunt Investigation
+# Greenfield Threat Hunt Investigation
 
-> End-to-end threat hunting investigation performed against the Greenfield training environment using Microsoft Defender XDR, Microsoft Sentinel, and static malware analysis.
+> End-to-end threat hunting investigation performed using Microsoft Defender XDR, Microsoft Sentinel, and static malware analysis.
 
 ---
 
 ## Overview
 
-This investigation documents the analysis of a simulated enterprise intrusion within the Greenfield environment. The objective of the hunt was to identify the initial compromise, reconstruct the attack timeline, determine the scope of the incident, analyze recovered malware artifacts, and assess the overall impact to the environment.
-
-During the investigation, telemetry from Microsoft Defender XDR and Microsoft Sentinel was correlated with recovered evidence bag artifacts to reconstruct the attack chain. Static analysis of the recovered PowerShell loader revealed an in-memory malware execution framework that bypassed Microsoft Antimalware Scan Interface (AMSI), downloaded an obfuscated payload, and executed shellcode directly in memory.
-
-The investigation identified communications between compromised systems and attacker-controlled infrastructure, evidence of malicious PowerShell execution, credential-related activity, Windows Management Instrumentation (WMI) usage, and multiple indicators of command-and-control activity.
+This project documents the investigation of a simulated enterprise compromise within the Greenfield environment. The objective was to identify the initial access vector, reconstruct the attack timeline, analyze recovered malware artifacts, and determine the overall impact using Microsoft Defender XDR, Microsoft Sentinel, and static analysis.
 
 ---
 
 ## Objectives
 
-- Confirm incident scope
-- Triage security alerts
-- Identify the initial access vector
+- Identify the initial compromise
 - Reconstruct the attack timeline
-- Perform static malware analysis
-- Correlate Defender and Sentinel telemetry
-- Assess impact to the Greenfield environment
-- Produce a professional incident report
+- Analyze recovered malware artifacts
+- Assess attacker activity and impact
+- Produce an incident response report
 
 ---
 
-## Environment
-
-### Platforms
+## Tools Used
 
 - Microsoft Defender XDR
 - Microsoft Sentinel
-- Windows Event Telemetry
+- Kusto Query Language (KQL)
 - PowerShell
 - Windows 11 Analysis VM
 
-### Primary Log Sources
+---
 
-- DeviceProcessEvents
-- DeviceNetworkEvents
-- DeviceLogonEvents
-- DeviceFileEvents
-- DeviceRegistryEvents
-- WindowsPowerShell_CL
-- WindowsProcess_CL
+## Investigation Summary
+
+The investigation identified a malicious HTML lure containing hidden prompt injection instructions designed to execute a PowerShell command. Static analysis of the recovered `loader.ps1` confirmed an AMSI bypass, download of an XOR-encoded payload, and in-memory shellcode execution using Windows API functions.
+
+Microsoft Defender XDR telemetry confirmed outbound HTTPS communications between the compromised workstation and attacker-controlled infrastructure. Additional findings included KeePass execution and WMI authentication activity. No evidence of persistence, successful credential theft, or data exfiltration was identified during the investigation.
 
 ---
 
-## Investigation Highlights
+## Key Findings
 
-- Identified malicious HTML prompt injection used as the initial delivery mechanism.
-- Confirmed outbound HTTPS communications to attacker infrastructure.
-- Recovered and statically analyzed a malicious PowerShell loader.
-- Identified AMSI bypass functionality.
-- Confirmed XOR decoding of an encrypted payload.
-- Confirmed in-memory shellcode execution using Windows API calls.
-- Correlated network telemetry with recovered malware artifacts.
-- Assessed potential credential access and lateral movement activity.
-- Produced IOC and MITRE ATT&CK mappings.
-
----
-
-## Attack Summary
-
-```text
-Malicious HTML
-        │
-        ▼
-PowerShell Execution
-        │
-        ▼
-loader.ps1
-        │
-        ▼
-AMSI Bypass
-        │
-        ▼
-Download XOR Payload
-        │
-        ▼
-Shellcode Injection
-        │
-        ▼
-HTTPS C2 Communication
-        │
-        ▼
-Post-Exploitation Activity
-```
+- Hidden prompt injection embedded within `blog_lure.html`
+- Malicious PowerShell loader recovered and analyzed
+- AMSI bypass identified
+- XOR-encoded shellcode downloaded and executed in memory
+- Command-and-control communication to attacker infrastructure confirmed
+- WMI activity observed during post-exploitation
+- No confirmed persistence or credential theft
 
 ---
 
 ## MITRE ATT&CK
 
 | Tactic | Technique |
-|----------|-----------|
-| Initial Access | T1189 Drive-by Compromise *(assessed)* |
-| Execution | T1059.001 PowerShell |
-| Defense Evasion | T1562.001 Impair Defenses |
-| Command and Control | T1071.001 Web Protocols |
-| Discovery | T1047 Windows Management Instrumentation |
-| Credential Access | T1555 *(assessment only)* |
+|---------|-----------|
+| Execution | T1059.001 – PowerShell |
+| Defense Evasion | T1562.001 – Impair Defenses |
+| Command & Control | T1071.001 – Web Protocols |
+| Discovery | T1047 – Windows Management Instrumentation |
 
 ---
 
@@ -109,58 +65,20 @@ Post-Exploitation Activity
 
 ### Domains
 
-- cdn.cloud-endpoint.net
-- api.cloud-endpoint.net
+- `cdn.cloud-endpoint.net`
+- `api.cloud-endpoint.net`
 
 ### Files
 
-- blog_lure.html
-- loader.ps1
-- shellcode_encoded.bin
+- `blog_lure.html`
+- `loader.ps1`
+- `shellcode_encoded.bin`
 
 ### SHA-256
 
 ```
 523F4C317E03CD1AC811FA7E1C308EFD6DF1E2A61048C1C0BDD5B4D5FFB73C34
 ```
-
----
-
-## Repository Structure
-
-```
-GF-INC-2026-0704
-│
-├── README.md
-├── Incident-Report.md
-├── Timeline.md
-├── IOC-Table.md
-├── MITRE.md
-├── Artifact-Analysis.md
-├── Defender-KQL.md
-├── Sentinel-KQL.md
-└── images
-```
-
----
-
-## Report
-
-The complete investigation report is available in:
-
-**Incident-Report.md**
-
-This report contains:
-
-- Executive Summary
-- Investigation Scope
-- Timeline
-- Technical Findings
-- MITRE ATT&CK Mapping
-- IOC Analysis
-- Static Malware Analysis
-- Containment Recommendations
-- Lessons Learned
 
 ---
 
@@ -173,6 +91,23 @@ This report contains:
 - Kusto Query Language (KQL)
 - Static Malware Analysis
 - MITRE ATT&CK Mapping
-- Digital Forensics
 - IOC Development
-- Technical Report Writing
+
+---
+
+## Repository Structure
+
+```
+Greenfield-Threat-Hunt/
+│
+├── README.md
+├── Incident-Report.md
+├── IOC-Table.md
+├── MITRE.md
+├── Queries.md
+└── images/
+```
+
+---
+
+> **Note:** This investigation was performed in a controlled lab environment for educational and defensive security purposes.
