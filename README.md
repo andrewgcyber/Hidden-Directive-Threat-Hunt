@@ -175,20 +175,6 @@ The complete investigation is organized into the following sections. Each chapte
 
 ---
 
-# Repository Structure
-
-```text
-Hidden-Directive-Threat-Hunt/
-│
-├── README.md
-├── report/
-├── queries/
-├── artifacts/
-├── images/
-└── docs/
-```
-
----
 
 > **Note**
 >
