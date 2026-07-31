@@ -132,20 +132,21 @@ Recommendations
 
 # Investigation Report
 
-The complete investigation is organized into dedicated sections.
+The complete investigation is organized into the following sections. Each chapter documents a specific phase of the investigation, from incident scoping through technical analysis, MITRE ATT&CK mapping, and remediation recommendations.
 
 | Section | Description |
 |----------|-------------|
-| [01 - Executive Summary](report/01-Executive-Summary.md) | High-level overview |
-| [02 - Incident Overview](report/02-Incident-Overview.md) | Investigation scope |
-| [03 - Investigation Methodology](report/03-Investigation-Methodology.md) | Hunting methodology |
-| [04 - Root Cause Analysis](report/04-Root-Cause-Analysis.md) | Root cause determination |
-| [05 - Attack Timeline](report/05-Attack-Timeline.md) | Chronological reconstruction |
-| [06 - Technical Findings](report/06-Technical-Findings.md) | Detailed findings |
-| [07 - MITRE ATT&CK](report/07-MITRE-ATTACK.md) | ATT&CK mapping |
-| [08 - Indicators of Compromise](report/08-Indicators-of-Compromise.md) | IOC summary |
-| [09 - Recommendations](report/09-Recommendations.md) | Remediation actions |
-| [10 - Lessons Learned](report/10-Lessons-Learned.md) | Investigation summary |
+| [01 - Incident Overview](report/01-Incident-Overview.md) | Introduces the incident scenario, investigation scope, affected systems, objectives, and data sources. |
+| [02 - Investigation Methodology](report/02-Investigation-Methodology.md) | Describes the threat hunting process, investigative workflow, tools, telemetry sources, and analysis techniques. |
+| [03 - Root Cause Analysis](report/03-Root-Cause-Analysis.md) | Explains how the compromise occurred through correlation of Defender XDR telemetry, Sentinel logs, and malware analysis. |
+| [04 - Attack Timeline](report/04-Attack-Timeline.md) | Reconstructs the attack chronologically using endpoint telemetry, malware analysis, and supporting evidence. |
+| [05 - Technical Findings](report/05-Technical-Findings.md) | Presents detailed analysis of PowerShell execution, malware behavior, command-and-control activity, WMI, and post-exploitation findings. |
+| [06 - MITRE ATT&CK Mapping](report/06-MITRE-ATTACK.md) | Maps confirmed attacker techniques to the MITRE ATT&CK Enterprise Framework with supporting evidence. |
+| [07 - Indicators of Compromise (IOCs)](report/07-Indicators-of-Compromise.md) | Documents malicious domains, files, hashes, processes, and command-line indicators identified during the investigation. |
+| [08 - Recommendations](report/08-Recommendations.md) | Provides prioritized remediation and detection recommendations based on the investigation findings. |
+| [09 - Lessons Learned](report/09-Lessons-Learned.md) | Summarizes the investigation outcomes, key takeaways, limitations, and professional lessons learned. |
+
+---
 
 ---
 
