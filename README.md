@@ -2,6 +2,9 @@
 
 # 🛡️ Hidden Directive Threat Hunt
 
+<img width="1672" height="941" alt="Hidden_Directive" src="https://github.com/user-attachments/assets/d264fa4c-3574-489f-b3bb-d29c534e046b" />
+
+
 ### Enterprise Malware Investigation using Microsoft Defender XDR, Microsoft Sentinel, and Static Malware Analysis
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
