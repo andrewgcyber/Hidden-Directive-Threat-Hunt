@@ -57,7 +57,8 @@ The following Defender tables were used throughout the investigation:
 
 > **Figure 2.** Microsoft Defender XDR Advanced Hunting interface used throughout the investigation.
 
-<img width="1385" height="790" alt="Screenshot 2026-07-31 154410" src="https://github.com/user-attachments/assets/3ec57cb1-4247-4473-a61f-70e7f90bdbbf" />
+<img width="1516" height="787" alt="Screenshot 2026-07-31 154612" src="https://github.com/user-attachments/assets/5e8f8700-8d7a-4405-b1f2-8578a8d7318b" />
+
 
 
 ---
