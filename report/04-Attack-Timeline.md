@@ -1,33 +1,35 @@
-# Root Cause Analysis
+# Attack Timeline
 
 ---
 
 # Overview
 
-The objective of the root cause analysis was to identify the initial compromise vector, determine how the malicious payload was executed, and establish the sequence of events that led to the observed attacker activity on **GF-WS01**.
+The attack timeline was reconstructed by correlating endpoint telemetry from Microsoft Defender XDR with static malware analysis findings. Events were organized chronologically to establish the progression of attacker activity from initial execution through post-exploitation.
 
-Evidence from Microsoft Defender XDR, Microsoft Sentinel, and static malware analysis was correlated to reconstruct the attack chain and validate each stage of the compromise.
-
----
-
-# Initial Access
-
-Static analysis identified a malicious HTML file (`blog_lure.html`) containing hidden prompt injection instructions designed to retrieve and execute a PowerShell payload. The recovered loader (`loader.ps1`) was responsible for downloading an XOR-encoded shellcode payload and executing it directly in memory.
-
-Although the exact user interaction that initiated execution could not be confirmed from the available telemetry, analysis indicates that the malicious PowerShell loader served as the primary execution mechanism observed during the investigation.
-
-> **Figure 5.** Original incident briefing used to scope the investigation.
-
-```text
-Insert Screenshot:
-images/figure01-incident-brief.png
-```
+The timeline below includes only activity directly supported by evidence collected during the investigation.
 
 ---
 
-# Malicious PowerShell Execution
+# Timeline of Events
 
-Microsoft Defender XDR telemetry confirmed execution of PowerShell through **cmd.exe** using an unrestricted execution policy.
+| Time (UTC) | Event | Evidence |
+|------------|-------|----------|
+| July 4, 2026 | Microsoft Defender XDR detected suspicious activity on **GF-WS01** | Defender Alert |
+| 06:01:34 | `cmd.exe` launched `powershell.exe` using `-ExecutionPolicy Unrestricted -File script49.ps1` | DeviceProcessEvents |
+| 06:01:35 | PowerShell execution confirmed | DeviceProcessEvents |
+| Shortly After | Administrative account management commands executed using `net.exe` | DeviceProcessEvents |
+| Shortly After | Additional `net1.exe` activity observed | DeviceProcessEvents |
+| During Execution | Loader downloaded and decoded an XOR-encoded payload | Static Malware Analysis |
+| During Execution | Shellcode executed directly in memory | Static Malware Analysis |
+| During Execution | HTTPS communication established with attacker-controlled infrastructure | DeviceNetworkEvents |
+| During Investigation | Encoded shellcode recovered and hashed | PowerShell Analysis |
+| Investigation Complete | No confirmed persistence, credential theft, lateral movement, or data exfiltration identified | Correlated Investigation Findings |
+
+---
+
+# Phase 1 – Initial Execution
+
+The earliest confirmed malicious activity occurred when Microsoft Defender XDR recorded **cmd.exe** launching **powershell.exe** using an unrestricted execution policy.
 
 Observed command:
 
@@ -35,100 +37,126 @@ Observed command:
 cmd /C powershell -ExecutionPolicy Unrestricted -File script49.ps1
 ```
 
-The use of the **Unrestricted** execution policy allowed the script to bypass the system's default PowerShell execution restrictions and execute successfully.
+This event marked the beginning of the observed attack chain and established PowerShell as the primary execution mechanism used by the attacker.
 
-> **Figure 6.** DeviceProcessEvents showing `cmd.exe` launching `powershell.exe` with `script49.ps1`.
+---
+
+> **Figure 9.** DeviceProcessEvents showing execution of `script49.ps1`.
 
 ```markdown
-![Figure 6](../images/figure06-script49-execution.png)
+![Figure 9](../images/figure09-script49-execution.png)
 
-**Figure 6.** Microsoft Defender XDR process telemetry confirming execution of `script49.ps1`.
+**Figure 9.** Microsoft Defender XDR process telemetry confirming execution of the malicious PowerShell script.
 ```
 
 ---
 
-# Static Malware Analysis
+# Phase 2 – PowerShell Activity
 
-Analysis of the recovered PowerShell loader (`loader.ps1`) identified several malicious capabilities commonly associated with fileless malware.
+Following execution of `script49.ps1`, Microsoft Defender XDR recorded additional PowerShell activity initiated from the original process.
+
+Process telemetry confirmed the parent-child relationship between `cmd.exe` and `powershell.exe`, validating the execution sequence identified during malware analysis.
+
+PowerShell activity aligned with the functionality observed within the recovered loader (`loader.ps1`).
+
+---
+
+> **Figure 10.** PowerShell process execution identified in Microsoft Defender XDR.
+
+```markdown
+![Figure 10](../images/figure10-powershell-process.png)
+
+**Figure 10.** Additional PowerShell execution observed after initial script launch.
+```
+
+---
+
+# Phase 3 – Administrative Commands
+
+Immediately following PowerShell execution, endpoint telemetry identified administrative account management activity involving **net.exe** and **net1.exe**.
+
+Observed commands included administrative user management operations executed under the SYSTEM context.
+
+Although these commands are legitimate Windows utilities, their proximity to the malicious PowerShell execution increased their investigative significance.
+
+---
+
+> **Figure 11.** Administrative commands executed after PowerShell activity.
+
+```markdown
+![Figure 11](../images/figure11-netexe.png)
+
+**Figure 11.** DeviceProcessEvents showing execution of `net.exe` following PowerShell activity.
+```
+
+---
+
+# Phase 4 – Malware Execution
+
+Static analysis of the recovered loader confirmed that execution continued through several stages designed to evade detection.
 
 Observed functionality included:
 
 - AMSI bypass
-- Remote payload download
 - XOR payload decoding
+- Shellcode execution in memory
 - Windows API memory allocation
-- In-memory shellcode execution
-- HTTPS communication with attacker infrastructure
+- HTTPS communication
 
-These findings were consistent with the endpoint telemetry collected from Microsoft Defender XDR and supported the conclusion that the malware attempted to avoid detection while executing entirely in memory.
+These findings aligned closely with the endpoint telemetry collected from Microsoft Defender XDR.
 
 ---
 
-# Shellcode Artifact
+# Phase 5 – Command and Control
 
-The investigation recovered the encoded shellcode payload (`shellcode_encoded.bin`) from the analysis environment.
+Network telemetry confirmed outbound HTTPS communications between the compromised workstation and attacker-controlled infrastructure.
 
-The artifact was preserved and hashed to maintain integrity throughout the investigation.
+These communications supported the conclusion that the malware successfully established external communications following execution.
 
-| Property | Value |
-|----------|-------|
-| File Name | shellcode_encoded.bin |
-| SHA-256 | 523F4C317E03CD1AC811FA7E1C308EFD6DF1E2A61048C1C0BDD5B4D5FFB73C34 |
+No evidence suggested large-scale outbound transfers consistent with data exfiltration.
 
-PowerShell verification confirmed the file hash remained consistent during analysis.
+---
 
-> **Figure 7.** SHA-256 hash verification of the recovered shellcode payload.
+# Phase 6 – Investigation Validation
+
+During the investigation, the encoded payload (`shellcode_encoded.bin`) was recovered from the analysis environment.
+
+PowerShell was used to:
+
+- Calculate the SHA-256 hash
+- Verify file integrity
+- Document artifact metadata
+
+These steps ensured that the recovered evidence could be reliably referenced throughout the investigation.
+
+---
+
+> **Figure 12.** SHA-256 verification of the recovered payload.
 
 ```markdown
-![Figure 7](../images/figure07-filehash.png)
+![Figure 12](../images/figure12-shellcode-hash.png)
 
-**Figure 7.** PowerShell output showing the SHA-256 hash of `shellcode_encoded.bin`.
+**Figure 12.** PowerShell output confirming the SHA-256 hash of the recovered shellcode.
 ```
 
 ---
 
-# Post-Exploitation Activity
+# Timeline Summary
 
-Microsoft Defender XDR identified additional activity following PowerShell execution.
+Correlating endpoint telemetry with malware analysis allowed the complete attack sequence to be reconstructed with a high degree of confidence.
 
-Observed behavior included:
+The investigation confirmed:
 
-- Administrative account management commands using **net.exe**
-- Windows Management Instrumentation (WMI) activity
-- Outbound HTTPS communications
-- KeePass-related activity
+- Malicious PowerShell execution.
+- Execution of `script49.ps1`.
+- Administrative command execution.
+- In-memory shellcode execution.
+- HTTPS command-and-control communications.
 
-These actions indicate that the attacker attempted to perform post-exploitation tasks after achieving code execution.
-
-However, the available telemetry did not confirm successful persistence, lateral movement, or credential theft.
-
-> **Figure 8.** DeviceProcessEvents showing administrative commands executed after PowerShell activity.
-
-```markdown
-![Figure 8](../images/figure08-netexe.png)
-
-**Figure 8.** Administrative account management commands identified during the investigation.
-```
-
----
-
-# Root Cause Determination
-
-Based on the evidence collected throughout the investigation, the root cause was determined to be the execution of a malicious PowerShell loader that downloaded and executed an encoded shellcode payload entirely in memory.
-
-The attack leveraged PowerShell with an unrestricted execution policy, implemented defense evasion through an AMSI bypass, and established outbound communications with attacker-controlled infrastructure.
-
-Although several post-exploitation techniques were observed, the investigation did not identify sufficient evidence to confirm:
-
-- Persistence
-- Credential theft
-- Lateral movement
-- Data exfiltration
-
-The available evidence indicates that the attacker successfully achieved code execution on **GF-WS01**, but the overall impact remained limited to the activity observed during the investigation window.
+Although several post-exploitation techniques were observed, the available telemetry did not confirm persistence, credential theft, lateral movement, or data exfiltration during the investigation window.
 
 ---
 
 # Transition
 
-After establishing the root cause of the compromise, the investigation focused on reconstructing the complete sequence of attacker actions. The following section presents a chronological timeline of the incident using endpoint telemetry, malware analysis, and correlated security events.
+After reconstructing the attack timeline, the investigation shifted to a detailed examination of each technical finding. The following section analyzes the evidence collected from endpoint telemetry, malware artifacts, and network activity to explain how each finding contributed to the overall investigation.
