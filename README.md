@@ -324,3 +324,189 @@ The following timeline reconstructs the attack using Microsoft Defender XDR tele
 
 > [!NOTE]
 > The timeline above combines endpoint telemetry with recovered malware artifacts to provide a complete view of the attack sequence.
+
+---
+
+# Technical Findings
+
+This section documents the primary findings identified during the investigation. Each finding was validated using Microsoft Defender XDR telemetry, Microsoft Sentinel, and static analysis of the recovered malware artifacts. Findings are presented in chronological order and include the supporting evidence, technical analysis, MITRE ATT&CK mapping, and an overall confidence assessment.
+
+---
+
+# Finding 1 – Malicious PowerShell Execution
+
+## Severity
+
+🔴 High
+
+## Confidence
+
+**Confirmed**
+
+---
+
+## Description
+
+Microsoft Defender XDR process telemetry identified **cmd.exe** spawning **powershell.exe** using the following command:
+
+```powershell
+cmd /C powershell -ExecutionPolicy Unrestricted -File script49.ps1
+```
+
+Execution of PowerShell with the **ExecutionPolicy Unrestricted** parameter allowed the script to bypass normal execution policy restrictions and marked the beginning of the observed attack chain.
+
+Unlike standard administrative PowerShell usage, this execution directly preceded additional malicious activity including password-related commands, outbound network communications, and execution of a staged PowerShell loader.
+
+---
+
+## Evidence
+
+![Figure 7](images/figure07-powershell-launch.png)
+
+**Figure 7.** DeviceProcessEvents showing `cmd.exe` launching `powershell.exe` with `-ExecutionPolicy Unrestricted -File script49.ps1`.
+
+---
+
+## Analysis
+
+PowerShell execution represented the initial execution phase of the attack.
+
+Several characteristics increased confidence that this activity was malicious:
+
+- ExecutionPolicy explicitly set to **Unrestricted**
+- Script execution rather than interactive administration
+- Immediate follow-on process activity
+- Correlation with recovered malware artifacts
+- Correlation with outbound HTTPS communication
+
+This event established the starting point for timeline reconstruction.
+
+---
+
+## MITRE ATT&CK
+
+| Tactic | Technique |
+|---------|-----------|
+| Execution | T1059.001 – PowerShell |
+
+---
+
+> [!IMPORTANT]
+> **Assessment:** Confirmed malicious execution.
+
+---
+
+# Finding 2 – Password Administration Activity
+
+## Severity
+
+🟠 Medium
+
+## Confidence
+
+**High**
+
+---
+
+## Description
+
+Shortly after PowerShell execution, Microsoft Defender XDR identified execution of **net.exe** performing password-related administrative commands involving the **sancadmin** account.
+
+Although the commands demonstrated administrative activity occurring immediately after the PowerShell execution, additional investigation did not identify sufficient evidence to confirm successful credential theft.
+
+---
+
+## Evidence
+
+![Figure 8](images/figure08-netexe.png)
+
+**Figure 8.** Process timeline showing execution of `net.exe` password-related commands.
+
+---
+
+## Analysis
+
+Administrative commands executed immediately following malicious PowerShell activity frequently indicate attacker attempts to enumerate, validate, or modify credentials.
+
+During this investigation:
+
+- Administrative activity was confirmed.
+- KeePass execution was later observed.
+- No `.kdbx` activity was identified.
+- No credential dumping artifacts were recovered.
+
+As a result, the investigation assessed the activity as **suspicious administrative behavior**, but **credential theft could not be confirmed**.
+
+---
+
+## MITRE ATT&CK
+
+| Tactic | Technique |
+|---------|-----------|
+| Credential Access | T1110 *(Assessment only)* |
+
+---
+
+> [!NOTE]
+> Administrative activity was observed; successful credential compromise was **not confirmed**.
+
+---
+
+# Finding 3 – Command-and-Control Communication
+
+## Severity
+
+🔴 High
+
+## Confidence
+
+**Confirmed**
+
+---
+
+## Description
+
+Microsoft Defender XDR `DeviceNetworkEvents` identified outbound HTTPS communications originating from **powershell.exe** to the domain:
+
+```
+cdn.cloud-endpoint.net
+```
+
+This communication directly matched the network retrieval functionality identified during static analysis of **loader.ps1**, linking endpoint telemetry with the recovered malware.
+
+---
+
+## Evidence
+
+![Figure 9](images/figure09-network.png)
+
+**Figure 9.** Microsoft Defender XDR `DeviceNetworkEvents` confirming outbound HTTPS communication.
+
+---
+
+## Analysis
+
+The observed network activity provided strong evidence that the malicious PowerShell loader successfully communicated with external infrastructure.
+
+Correlation between Defender telemetry and the recovered malware confirmed:
+
+- Remote payload retrieval
+- HTTPS command-and-control communication
+- Successful execution of the PowerShell loader
+
+These findings significantly increased confidence that the recovered artifacts accurately represented the malware executed on the compromised workstation.
+
+---
+
+## MITRE ATT&CK
+
+| Tactic | Technique |
+|---------|-----------|
+| Command and Control | T1071.001 – Web Protocols |
+
+---
+
+> [!IMPORTANT]
+> **Assessment:** Confirmed outbound communication with attacker-controlled infrastructure.
+
+---
