@@ -17,8 +17,8 @@ The investigation began with an incident briefing provided by the Greenfield Log
 > **Figure 1. Initial incident briefing provided to the investigation team.**
 
 ```text
-Insert Screenshot:
-images/figure01-incident-brief.png
+<img width="1241" height="556" alt="image" src="https://github.com/user-attachments/assets/d1aa05f5-cd7c-4841-88e5-ffb12984af0d" />
+
 ```
 
 The briefing identified the following hosts as being within the investigation scope:
