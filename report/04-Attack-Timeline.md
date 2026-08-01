@@ -61,11 +61,7 @@ PowerShell activity aligned with the functionality observed within the recovered
 
 > **Figure 10.** PowerShell process execution identified in Microsoft Defender XDR.
 
-```markdown
-![Figure 10](../images/figure10-powershell-process.png)
 
-**Figure 10.** Additional PowerShell execution observed after initial script launch.
-```
 
 ---
 
@@ -81,11 +77,6 @@ Although these commands are legitimate Windows utilities, their proximity to the
 
 > **Figure 11.** Administrative commands executed after PowerShell activity.
 
-```markdown
-![Figure 11](../images/figure11-netexe.png)
-
-**Figure 11.** DeviceProcessEvents showing execution of `net.exe` following PowerShell activity.
-```
 
 ---
 
