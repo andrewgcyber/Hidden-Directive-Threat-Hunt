@@ -74,7 +74,8 @@ PowerShell verification confirmed the file hash remained consistent during analy
 
 > **Figure 7.** SHA-256 hash verification of the recovered shellcode payload.
 
-<img width="1166" height="257" alt="Screenshot 2026-07-31 172918" src="https://github.com/user-attachments/assets/acec9987-b24b-4350-a4aa-2213205764dc" />
+<img width="1166" height="257" alt="Screenshot 2026-07-31 172918" src="https://github.com/user-attachments/assets/1b27ae66-84cb-4663-b88a-dcdbf6dfe07b" />
+
 
 ---
 
@@ -94,7 +95,8 @@ These actions indicate that the attacker attempted to perform post-exploitation 
 However, the available telemetry did not confirm successful persistence, lateral movement, or credential theft.
 
 > **Figure 8.** DeviceProcessEvents showing administrative commands executed after PowerShell activity.
-<img width="1166" height="257" alt="Screenshot 2026-07-31 172918" src="https://github.com/user-attachments/assets/073729ce-d5ea-4d9f-b4dd-54a0a1edab6c" />
+<img width="1370" height="757" alt="image" src="https://github.com/user-attachments/assets/ede13f99-6a7b-4a8c-8c1b-3d6ccac0b063" />
+
 
 
 
