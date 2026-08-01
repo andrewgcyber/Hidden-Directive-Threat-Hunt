@@ -78,11 +78,8 @@ The recovered payload (`shellcode_encoded.bin`) was preserved and verified using
 
 > **Figure 14.** SHA-256 verification of the recovered payload.
 
-```markdown
-![Figure 14](../images/figure14-filehash.png)
+<img width="1099" height="233" alt="Screenshot 2026-07-31 172958" src="https://github.com/user-attachments/assets/bab0cb57-6b44-4c07-a014-8ecc30040a79" />
 
-**Figure 14.** PowerShell hash verification of the recovered shellcode artifact.
-```
 
 ## Significance
 
