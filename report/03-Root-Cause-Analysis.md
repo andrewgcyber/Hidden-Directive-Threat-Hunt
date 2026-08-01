@@ -94,12 +94,7 @@ These actions indicate that the attacker attempted to perform post-exploitation 
 However, the available telemetry did not confirm successful persistence, lateral movement, or credential theft.
 
 > **Figure 8.** DeviceProcessEvents showing administrative commands executed after PowerShell activity.
-
-```markdown
-![Figure 8](../images/figure08-netexe.png)
-
-**Figure 8.** Administrative account management commands identified during the investigation.
-```
+<img width="1370" height="757" alt="image" src="https://github.com/user-attachments/assets/e2ac7acc-1b6d-485f-8252-6d329818eb83" />
 
 ---
 
