@@ -42,9 +42,7 @@ This event marked the beginning of the observed attack chain and established Pow
 ---
 
 > **Figure 9.** DeviceProcessEvents showing execution of `script49.ps1`.
-
-```markdown
-![Figure 9](../images/figure09-script49-execution.png)
+<img width="1202" height="704" alt="image" src="https://github.com/user-attachments/assets/508b8cf9-424d-44e6-9e6f-015c5478f153" />
 
 **Figure 9.** Microsoft Defender XDR process telemetry confirming execution of the malicious PowerShell script.
 ```
