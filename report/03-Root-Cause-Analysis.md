@@ -74,7 +74,8 @@ PowerShell verification confirmed the file hash remained consistent during analy
 
 > **Figure 7.** SHA-256 hash verification of the recovered shellcode payload.
 
-<img width="1166" height="257" alt="Screenshot 2026-07-31 172918" src="https://github.com/user-attachments/assets/1b27ae66-84cb-4663-b88a-dcdbf6dfe07b" />
+
+ src="https://github.com/user-attachments/assets/1b27ae66-84cb-4663-b88a-dcdbf6dfe07b" />
 
 
 ---
