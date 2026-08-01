@@ -132,12 +132,7 @@ These steps ensured that the recovered evidence could be reliably referenced thr
 ---
 
 > **Figure 12.** SHA-256 verification of the recovered payload.
-
-```markdown
-![Figure 12](../images/figure12-shellcode-hash.png)
-
-**Figure 12.** PowerShell output confirming the SHA-256 hash of the recovered shellcode.
-```
+<img width="1099" height="233" alt="Screenshot 2026-07-31 172958" src="https://github.com/user-attachments/assets/12985a95-6fff-4c2f-88f9-1a2e11acff23" />
 
 ---
 
