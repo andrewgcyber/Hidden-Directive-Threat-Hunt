@@ -137,13 +137,6 @@ Following PowerShell execution, Microsoft Defender XDR identified execution of a
 
 Observed command examples included account management operations executed under the SYSTEM context.
 
-> **Figure 15.** Administrative account management commands identified during the investigation.
-
-```markdown
-![Figure 15](../images/figure15-netexe.png)
-
-**Figure 15.** DeviceProcessEvents showing execution of administrative commands after PowerShell activity.
-```
 
 ## Significance
 
