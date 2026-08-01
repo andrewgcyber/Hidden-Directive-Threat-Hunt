@@ -33,7 +33,8 @@ Execution of PowerShell with the **Unrestricted** execution policy bypassed norm
 > **Figure 13.** DeviceProcessEvents confirming execution of `script49.ps1`.
 
 ```markdown
-![Figure 13](../images/figure13-script49.png)
+<img width="961" height="484" alt="Screenshot 2026-07-31 154700" src="https://github.com/user-attachments/assets/0999b14d-cff8-42e9-9c74-2fb2e22118e6" />
+
 
 **Figure 13.** Microsoft Defender XDR telemetry showing `cmd.exe` launching `powershell.exe` with `script49.ps1`.
 ```
