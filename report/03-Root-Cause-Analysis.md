@@ -33,10 +33,9 @@ cmd /C powershell -ExecutionPolicy Unrestricted -File script49.ps1
 
 The use of the **Unrestricted** execution policy allowed the script to bypass the system's default PowerShell execution restrictions and execute successfully.
 
-> **Figure 6.** DeviceProcessEvents showing `cmd.exe` launching `powershell.exe` with `script49.ps1`.
+> **Figure 6.** 
+<img width="1154" height="360" alt="image" src="https://github.com/user-attachments/assets/41282744-b1aa-42e8-b689-81fc02acd8f9" />
 
-```markdown
-![Figure 6](../images/figure06-script49-execution.png)
 
 **Figure 6.** Microsoft Defender XDR process telemetry confirming execution of `script49.ps1`.
 ```
