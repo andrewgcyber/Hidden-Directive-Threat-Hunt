@@ -16,12 +16,8 @@ Static analysis identified a malicious HTML file (`blog_lure.html`) containing h
 
 Although the exact user interaction that initiated execution could not be confirmed from the available telemetry, analysis indicates that the malicious PowerShell loader served as the primary execution mechanism observed during the investigation.
 
-> **Figure 5.** Original incident briefing used to scope the investigation.
-
-```text
-Insert Screenshot:
-images/figure01-incident-brief.png
-```
+> **Figure 5.** 
+<img width="1142" height="434" alt="image" src="https://github.com/user-attachments/assets/55361922-3718-4fce-8eae-af5b19aa583e" />
 
 ---
 
